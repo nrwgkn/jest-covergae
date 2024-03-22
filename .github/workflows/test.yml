@@ -3,6 +3,7 @@ on:
   pull_request:
     branches:
       - main
+    types: [opened, reopened, synchronize, ready_for_review]
 jobs:
   coverage:
     if: ${{ github.event.pull_request.draft == false }}
@@ -12,7 +13,5 @@ jobs:
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           test-script: npm run test:coverage
-          coverage-file: report.json
-          base-coverage-file: report.json
           annotations: none
           custom-title: Coverage report for frontend
