@@ -39,7 +39,8 @@ jobs:
             change_files[$i]=${change_files[$i]//frontend\//}
           done
           IFS="|";
-          files="${change_files[*]}";unset IFS;
+          files="${change_files[*]}";
+          unset IFS;
           npx cross-env DEVICE=sp jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }} --collectCoverageFrom=$files --coverageReporters=json-summary
 
       - name: Run test PC
