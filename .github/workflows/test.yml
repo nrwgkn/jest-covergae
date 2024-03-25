@@ -1,69 +1,17 @@
-name: Test
-
+name: 'coverage'
 on:
-  workflow_dispatch:
-
   pull_request:
     branches:
       - main
     types: [opened, reopened, synchronize, ready_for_review]
-
 jobs:
-  test:
+  coverage:
     if: ${{ github.event.pull_request.draft == false }}
-    runs-on: ubuntu-20.04
-
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout Commit
-        uses: actions/checkout@v3
+      - uses: actions/checkout@v3
+      - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          fetch-depth: 0
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '18'
-
-      - name: Install Dependencies
-        run: npm ci
-
-      - name: Get number of CPU cores
-        uses: SimenB/github-actions-cpu-cores@v1
-        id: cpu-cores
-
-      - name: Run test SP
-        id: coverage-report
-        run: |
-          change_files=($(git diff --name-only origin/main | grep -E '^frontend/src/.*\.ts(x)?$'))
-          for i in "${!change_files[@]}"; do
-            change_files[$i]=${change_files[$i]//frontend\//}
-          done
-          IFS="|";
-          files="${change_files[*]}";
-          unset IFS;
-          npx cross-env DEVICE=sp jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }} --collectCoverageFrom=$files --coverageReporters=json-summary
-
-      - name: Run test PC
-        run: npx cross-env DEVICE=pc jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
-
-      - name: Post jest coverage comments
-        uses: actions/github-script@v6
-        env:
-          GH_TOKEN: ${{ github.token }}
-          COMMENT: ${{ steps.coverage-report.outputs.GITHUB_ENV }}
-        with:
-          script: |
-            const fs = require('fs')
-            const data = JSON.parse(fs.readFileSync('./frontend/coverage/coverage-summary.json', 'utf8'))
-            let mdTable = "| File Path | Lines % | Functions % | Statements % | Branches % |\n| --- | --- | --- | --- | --- |\n";
-
-            for (const path in data) {
-                const coverage = data[path];
-                mdTable += `| ${path.replace('/home/runner/work/FC_Cloud/FC_Cloud/frontend/', '')} | ${coverage.lines?.pct || 0} | ${coverage.functions?.pct || 0} | ${coverage.statements?.pct || 0} | ${coverage.branches?.pct || 0} |\n`;
-            }
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: mdTable
-            })
+          test-script: npm run test:coverage
+          annotations: none
+          custom-title: Coverage report for frontend
