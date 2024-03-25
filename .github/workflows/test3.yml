@@ -22,6 +22,6 @@ jobs:
 
     - name: coverage
       run: |
-        jest --coverage
+        npm run test:summary
         echo '# Coverage :rocket:' >> $GITHUB_STEP_SUMMARY
         cat coverage/report.txt | sed '1d' | sed '$d' >> $GITHUB_STEP_SUMMARY
