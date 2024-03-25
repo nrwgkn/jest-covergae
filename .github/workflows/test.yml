@@ -1,17 +1,36 @@
-name: 'coverage'
+name: Test
+
 on:
+  workflow_dispatch:
+
   pull_request:
     branches:
-      - main
+      - master
     types: [opened, reopened, synchronize, ready_for_review]
+
 jobs:
-  coverage:
+  test:
     if: ${{ github.event.pull_request.draft == false }}
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
+
     steps:
-      - uses: actions/checkout@v3
-      - uses: ArtiomTr/jest-coverage-report-action@v2
+      - name: Checkout Commit
+        uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
         with:
-          test-script: npm run test:coverage
-          annotations: none
-          custom-title: Coverage report for frontend
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Get number of CPU cores
+        uses: SimenB/github-actions-cpu-cores@v1
+        id: cpu-cores
+
+      - name: Run test SP
+        run: npx cross-env DEVICE=sp jest --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
+
+      - name: Run test PC
+        run: npx cross-env DEVICE=pc jest --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
