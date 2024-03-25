@@ -1,4 +1,4 @@
-import hello from "./hello.js";
+const hello = require("./hello");
 
 test("says hello to the world", () => {
   expect(hello()).toBe("Hello, World!");
