@@ -30,10 +30,36 @@ jobs:
         id: cpu-cores
 
       - name: Run test SP
+        id: coverage-report
         run: |
-          npx cross-env DEVICE=sp jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
-          echo '# Coverage :rocket:' >> $GITHUB_STEP_SUMMARY
-          cat coverage/report.txt | sed '1d' | sed '$d' >> $GITHUB_STEP_SUMMARY
+          change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF} | grep -E '^frontend/src/.*\.ts(x)?$'))
+          for i in "${!change_files[@]}"; do
+            change_files[$i]=${change_files[$i]//frontend\//}
+          done
+          IFS="|";files="${change_files[*]}";unset IFS;
+          npx cross-env DEVICE=sp jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }} --collectCoverageFrom=$files --coverageReporters=json-summary
 
       - name: Run test PC
         run: npx cross-env DEVICE=pc jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
+
+      - name: Post jest coverage comments
+        uses: actions/github-script@v6
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMENT: ${{ steps.coverage-report.outputs.GITHUB_ENV }}
+        with:
+          script: |
+            const fs = require('fs')
+            const data = JSON.parse(fs.readFileSync('./frontend/coverage/coverage-summary.json', 'utf8'))
+            let mdTable = "| File Path | Lines % | Functions % | Statements % | Branches % |\n| --- | --- | --- | --- | --- |\n";
+
+            for (const path in data) {
+                const coverage = data[path];
+                mdTable += `| ${path.replace('/home/runner/work/FC_Cloud/FC_Cloud/frontend/', '')} | ${coverage.lines?.pct || 0} | ${coverage.functions?.pct || 0} | ${coverage.statements?.pct || 0} | ${coverage.branches?.pct || 0} |\n`;
+            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: mdTable
+            })
