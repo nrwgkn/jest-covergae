@@ -6,5 +6,12 @@
   },
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "jest": {
+    "coverageReporters": [
+      [
+        "text", { "file": "report.txt" }
+      ]
+    ]
   }
 }
