@@ -30,7 +30,7 @@ jobs:
         id: cpu-cores
 
       - name: Run test SP
-        run: npx cross-env DEVICE=sp jest --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
+        run: npx cross-env DEVICE=sp jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
 
       - name: Run test PC
-        run: npx cross-env DEVICE=pc jest --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
+        run: npx cross-env DEVICE=pc jest --coverage --bail --forceExit --max-workers ${{ steps.cpu-cores.outputs.count }}
