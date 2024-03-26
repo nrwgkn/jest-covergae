@@ -3,8 +3,16 @@
   "scripts": {
     "test": "jest",
     "test:coverage": "npm run test -- --coverage --silent --testLocationInResults --ci --json --outputFile=\"report.json\"",
+    "test:summary": "jest --coverage"
   },
   "devDependencies": {
     "jest": "^29.7.0"
+  },
+  "jest": {
+    "coverageReporters": [
+      [
+        "text", { "file": "report.txt" }
+      ]
+    ]
   }
 }
