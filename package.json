@@ -13,6 +13,9 @@
       [
         "text", { "file": "report.txt" }
       ]
+    ],
+    "collectCoverageFrom": [
+      "frontend/**/*.js"
     ]
   }
 }
