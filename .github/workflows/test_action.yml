@@ -23,9 +23,12 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Run tests
+        run: npm run test --coverage --json --outputFile=/home/runner/work/_actions/mattallty/jest-github-action/v1/dist/jest.results.json
+
       - name: Unit Test with coverage
         uses: mattallty/jest-github-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          test-command: 'npm run test:coverage'
+          test-command: 'echo done'
