@@ -9,8 +9,7 @@ on:
 
 jobs:
   tests:
-    runs-on: ubuntu-18.04
-    timeout-minutes: 10
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v2
