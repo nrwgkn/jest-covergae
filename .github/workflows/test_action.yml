@@ -8,27 +8,22 @@ on:
     types: [opened, reopened, synchronize, ready_for_review]
 
 jobs:
-  coverage:
-    if: ${{ github.event.pull_request.draft == false }}
-    runs-on: ubuntu-latest
+  tests:
+    runs-on: ubuntu-18.04
+    timeout-minutes: 10
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      - name: Set up Node
-        uses: actions/setup-node@v3
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
         with:
-          node-version: '18'
+          node-version: '12.x'
 
-      - name: Install Dependencies
+      - name: Install dependencies
         run: npm install
-
-      - name: Run tests
-        run: npm run test --coverage --json --outputFile=/home/runner/work/_actions/mattallty/jest-github-action/v1/dist/jest.results.json
 
       - name: Unit Test with coverage
         uses: mattallty/jest-github-action@v1
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          test-command: 'echo done'
+          test-command: "npm run test:coverage"
