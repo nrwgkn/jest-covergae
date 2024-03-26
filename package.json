@@ -2,7 +2,7 @@
 {
   "scripts": {
     "test": "jest",
-    "test:coverage": "npm run test --coverage --json --outputFile=jest.results.json"
+    "test:coverage": "npm run test --coverage --json --outputFile=/home/runner/work/_actions/mattallty/jest-github-action/v1/dist/jest.results.json"
   },
   "devDependencies": {
     "jest": "^29.7.0"
