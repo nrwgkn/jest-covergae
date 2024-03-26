@@ -1,0 +1,26 @@
+name: 'summary'
+on:
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+    types: [opened, reopened, synchronize, ready_for_review]
+jobs:
+  coverage:
+    if: ${{ github.event.pull_request.draft == false }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+
+      - name: Summary
+        run: |
+          npm ci
+          npm run test:summary
+          echo '# Coverage :rocket:' >> $GITHUB_STEP_SUMMARY
+          cat coverage/report.txt | sed '1d' | sed '$d' >> $GITHUB_STEP_SUMMARY
