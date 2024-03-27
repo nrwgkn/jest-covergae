@@ -32,10 +32,9 @@ jobs:
       - name: Run Tests
         id: coverage-report
         run: |
-          files="$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep -E "src/.*\.(js|cjs|mjs|jsx|ts|tsx)$" | tr '\n' ' ' | xargs)";
-          formattedOption=$(echo "^$files" | sed 's/ /|^/g');
-
-          if [[ $files == "" ]]; then
-            echo "特定のファイルに変更がないので終了します。"
-            exit 0
-          fi
+          change_files="$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep -E "src/.*\.(js|cjs|mjs|jsx|ts|tsx)$")";
+          for i in "${!change_files[@]}"; do
+            change_files[$i]=${change_files[$i]//src\//}
+          done
+          IFS="|";files="${change_files[*]}";unset IFS;
+          npm run unit -- --coverage --collectCoverageFrom=$files --coverageReporters=json-summary
