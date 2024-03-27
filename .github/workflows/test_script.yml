@@ -33,5 +33,12 @@ jobs:
         id: coverage-report
         run: |
           change_files="$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep -E "src/.*\.(js|cjs|mjs|jsx|ts|tsx)$")";
+
+          if [ ${#change_files[@]} -eq 0 ]; then
+            echo "change_files is empty"
+          else
+            echo "change_files is not empty"
+          fi
+
           IFS="|";files="${change_files[*]}";unset IFS;
           npx jest -- --coverage --collectCoverageFrom=$files --coverageReporters=json-summary
