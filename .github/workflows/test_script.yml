@@ -49,7 +49,7 @@ jobs:
       
             for (const path in data) {
                 const coverage = data[path];
-                mdTable += `| ${path.replace('/home/runner/work/FC_Cloud/FC_Cloud/src/', '')} | ${coverage.lines?.pct || 0} | ${coverage.functions?.pct || 0} | ${coverage.statements?.pct || 0} | ${coverage.branches?.pct || 0} |\n`;
+                mdTable += `| ${path.replace('/home/runner/work/jest-covergae/jest-covergae/', '')} | ${coverage.lines?.pct || 0} | ${coverage.functions?.pct || 0} | ${coverage.statements?.pct || 0} | ${coverage.branches?.pct || 0} |\n`;
             }
             github.rest.issues.createComment({
               issue_number: context.issue.number,
