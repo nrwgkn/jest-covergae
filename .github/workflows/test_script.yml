@@ -33,13 +33,3 @@ jobs:
         id: coverage-report
         run: |
           files="$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep -E "src/.*\.(js|cjs|mjs|jsx|ts|tsx)$")";
-
-          if [[ -z "$files" ]]; then
-            echo "特定のファイルに変更がないので終了します。"
-            exit 0
-          fi
-          # if [ ${#change_files[@]} -eq 0 ]; then
-          #   echo "change_files is empty"
-          # else
-          #   echo "change_files is not empty"
-          # fi
