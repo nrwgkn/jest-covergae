@@ -35,3 +35,25 @@ jobs:
           change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF} | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
           IFS="|";files="${change_files[*]}";unset IFS;
           npx jest -- --coverage --collectCoverageFrom=$files --coverageReporters=json-summary
+
+      - name: Post jest coverage comments
+        uses: actions/github-script@v6
+        env:
+          GH_TOKEN: ${{ github.token }}
+          COMMENT: ${{ steps.coverage-report.outputs.GITHUB_ENV }}
+        with:
+          script: |
+            const fs = require('fs')
+            const data = JSON.parse(fs.readFileSync('./src/coverage/coverage-summary.json', 'utf8'))
+            let mdTable = "| File Path | Lines % | Functions % | Statements % | Branches % |\n| --- | --- | --- | --- | --- |\n";
+      
+            for (const path in data) {
+                const coverage = data[path];
+                mdTable += `| ${path.replace('/home/runner/work/FC_Cloud/FC_Cloud/src/', '')} | ${coverage.lines?.pct || 0} | ${coverage.functions?.pct || 0} | ${coverage.statements?.pct || 0} | ${coverage.branches?.pct || 0} |\n`;
+            }
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: mdTable
+            })
