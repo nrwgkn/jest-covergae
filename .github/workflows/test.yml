@@ -33,10 +33,10 @@ jobs:
         run: |
           change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...HEAD | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
           IFS="|";files="${change_files[*]}";unset IFS;
-          echo "files=$files" >> $GITHUB_ENV
+          echo "change_files=$change_files" >> $GITHUB_ENV
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          test-script: npx jest --coverage --collectCoverageFrom="${{ env.files }}"
+          test-script: npx jest --coverage --collectCoverageFrom="${{ env.change_files }}"
           annotations: none
           custom-title: Coverage report for frontend
