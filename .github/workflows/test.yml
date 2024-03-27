@@ -11,32 +11,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Display node/npm versions
-        run: |
-          echo "node: $(node -v)"
-          echo "npm: $(npm -v)"
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Prepare files
-        id: step1
-        run: |
-          change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...HEAD | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
-          IFS="|";files="${change_files[*]}";unset IFS;
-          echo "change_files=$change_files" >> $GITHUB_ENV
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          test-script: npx jest --coverage --collectCoverageFrom="${{ env.change_files }}"
+          test-script: npm run test:coverage
           annotations: none
           custom-title: Coverage report for frontend
+
