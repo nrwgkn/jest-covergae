@@ -34,7 +34,7 @@ jobs:
         run: |
           change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF} | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
           IFS="|";files="${change_files[*]}";unset IFS;
-          npx jest -- --coverage --collectCoverageFrom=$files --coverageReporters=json-summary
+          npx jest --coverage --collectCoverageFrom=$files --coverageReporters=json-summary
 
       - name: Post jest coverage comments
         uses: actions/github-script@v6
