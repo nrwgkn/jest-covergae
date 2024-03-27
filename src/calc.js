@@ -8,4 +8,4 @@ function calc(mode) {
   }
 }
 
-module.exports = hello;
+module.exports = calc;
