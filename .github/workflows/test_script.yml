@@ -39,6 +39,3 @@ jobs:
           else
             echo "change_files is not empty"
           fi
-
-          IFS="|";files="${change_files[*]}";unset IFS;
-          npx jest -- --coverage --collectCoverageFrom=$files --coverageReporters=json-summary
