@@ -32,10 +32,9 @@ jobs:
       - name: Run Tests
         id: coverage-report
         run: |
-          files="$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep -E "src/.*\.(js|cjs|mjs|jsx|ts|tsx)$" | tr '\n' ' ' | xargs)";
-          formattedOption=$(echo "^$files" | sed 's/ /|^/g');
+          files="$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep -E "src/.*\.(js|cjs|mjs|jsx|ts|tsx)$")";
 
-          if [[ $files == "" ]]; then
+          if [[ -z "$files" ]]; then
             echo "特定のファイルに変更がないので終了します。"
             exit 0
           fi
