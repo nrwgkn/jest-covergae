@@ -14,12 +14,27 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Display node/npm versions
+        run: |
+          echo "node: $(node -v)"
+          echo "npm: $(npm -v)"
+
+      - name: Install Dependencies
+        run: npm install
+
       - name: Prepare files
         id: step1
         run: |
           change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF} | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
           IFS="|";files="${change_files[*]}";unset IFS;
           echo "::set-output name=files::$files"
+
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           test-script: npx jest --coverage --collectCoverageFrom=steps.step1.outputs.files
