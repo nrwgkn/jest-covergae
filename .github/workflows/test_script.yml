@@ -32,4 +32,4 @@ jobs:
       - name: Run Tests
         id: coverage-report
         run: |
-          files="$(git diff --name-only --diff-filter=AM origin/${{ github.base_ref }}...HEAD | grep -E "src/.*\.(js|cjs|mjs|jsx|ts|tsx)$")";
+          files=($(git diff --name-only origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF} | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
