@@ -33,10 +33,15 @@ jobs:
         run: |
           change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...HEAD | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
           IFS="|";files="${change_files[*]}";unset IFS;
-          echo "change_files=$change_files" >> $GITHUB_ENV
+          if [ -n "$files" ]; then
+            echo "change_files=$change_files" >> $GITHUB_ENV
+          else
+            echo "No files have been changed."
+          fi
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
           test-script: npx jest --coverage --collectCoverageFrom="${{ env.change_files }}"
           annotations: none
           custom-title: Coverage report for frontend
+          skip-step: install
