@@ -31,7 +31,7 @@ jobs:
       - name: Prepare files
         id: step1
         run: |
-          change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...origin/${GITHUB_HEAD_REF} | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
+          change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...HEAD | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
           IFS="|";files="${change_files[*]}";unset IFS;
           echo "files=$files" >> $GITHUB_ENV
 
