@@ -25,3 +25,8 @@ jobs:
           custom-title: Coverage report for frontend ver.2
           skip-step: install
           output: report-markdown
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          # pass output from the previous step by id.
+          message: ${{ steps.coverage.outputs.report }}
