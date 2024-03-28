@@ -23,3 +23,5 @@ jobs:
           test-script: npm run test:coverage
           annotations: none
           custom-title: Coverage report for frontend ver.2
+          skip-step: install
+          output: report-markdown
