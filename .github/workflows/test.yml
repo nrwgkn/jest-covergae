@@ -18,3 +18,8 @@ jobs:
           annotations: none
           custom-title: Coverage report for frontend
 
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          test-script: npm run test:coverage
+          annotations: none
+          custom-title: Coverage report for frontend ver.2
