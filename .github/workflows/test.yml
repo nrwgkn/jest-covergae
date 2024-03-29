@@ -26,7 +26,5 @@ jobs:
           skip-step: install
           output: report-markdown
 
-      - uses: marocchino/sticky-pull-request-comment@v2
-        with:
-          # pass output from the previous step by id.
-          message: ${{ steps.coverage.outputs.report }}
+      - run: |
+          echo "Coverage report: ${{ steps.coverage.outputs.report }}"
