@@ -26,14 +26,14 @@ jobs:
           custom-title: Coverage report for frontend ver.2
           skip-step: install
           output: report-markdown
-      
-      - name: Set report as env variable
-        run: printf 'REPORT="%s"\n' "${{ steps.coverage.outputs.report }}" | sed 's/$/"/' | sed 's/^/"/' >> $GITHUB_ENV
-
-      - name: Display report
-        run: printf "%s\n" "$REPORT"
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           # pass output from the previous step by id.
-          message: ${{ env.REPORT }}
+          message: |
+            <details>
+            <summary>Coverage report</summary>
+      
+            ${{ steps.coverage.outputs.report }}
+      
+            </details>
