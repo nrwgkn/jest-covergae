@@ -1,5 +1,5 @@
 const sample = require("./sample");
 
 test("sample", () => {
-  expect(sample(true)).toBe("sample");
+  expect(sample(1)).toBe("sample1");
 });
