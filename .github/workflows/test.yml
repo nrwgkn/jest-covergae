@@ -27,10 +27,13 @@ jobs:
           skip-step: install
           output: report-markdown
       
-      - name: Echo coverage report
-        run: echo "${{ steps.coverage.outputs.report }}"
+      - name: Set report as env variable
+        run: echo "REPORT=${{ steps.coverage.outputs.report }}" >> $GITHUB_ENV
+
+      - name: Display report
+        run: printf "%s\n" "$REPORT"
 
       - uses: marocchino/sticky-pull-request-comment@v2
         with:
           # pass output from the previous step by id.
-          message: ${{ steps.coverage.outputs.report }}
+          message: ${{ env.REPORT }}
