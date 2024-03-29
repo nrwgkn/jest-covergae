@@ -19,6 +19,7 @@ jobs:
           custom-title: Coverage report for frontend
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
+        id: coverage
         with:
           test-script: npm run test:coverage
           annotations: none
@@ -26,5 +27,7 @@ jobs:
           skip-step: install
           output: report-markdown
 
-      - run: |
-          echo "Coverage report: ${{ steps.coverage.outputs.report }}"
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          # pass output from the previous step by id.
+          message: ${{ steps.coverage.outputs.report }}
