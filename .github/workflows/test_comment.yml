@@ -29,3 +29,5 @@ jobs:
         with:
           coverage-path: ./coverage.txt
           report-only-changed-files: true
+          remove-links-to-files: true
+          remove-links-to-lines: true
