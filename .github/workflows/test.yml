@@ -11,32 +11,33 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          ref: ${{ github.event.pull_request.head.ref }}
-          fetch-depth: 0
-
-      - name: Use Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: 18
-
-      - name: Display node/npm versions
-        run: |
-          echo "node: $(node -v)"
-          echo "npm: $(npm -v)"
-
-      - name: Install Dependencies
-        run: npm install
-
-      - name: Prepare files
-        id: step1
-        run: |
-          change_files=($(git diff --name-only origin/${GITHUB_BASE_REF}...HEAD | grep -E 'src/.*\.(js|cjs|mjs|jsx|ts|tsx)$'))
-          IFS="|";files="${change_files[*]}";unset IFS;
-          echo "change_files=$change_files" >> $GITHUB_ENV
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
+        id: coverage01
         with:
-          test-script: npx jest --coverage --collectCoverageFrom="${{ env.change_files }}"
+          test-script: npm run test:coverage
           annotations: none
-          custom-title: Coverage report for frontend
+          custom-title: Coverage report for frontend No.1
+          skip-step: install
+          output: report-markdown
+
+      - uses: ArtiomTr/jest-coverage-report-action@v2
+        id: coverage02
+        with:
+          test-script: npm run test:coverage
+          annotations: none
+          custom-title: Coverage report for frontend No.2
+          skip-step: install
+          output: report-markdown
+
+      - uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          # pass output from the previous step by id.
+          message: |
+            <details>
+            <summary>Coverage report No.2</summary>
+      
+            ${{ steps.coverage01.outputs.report }}
+            ${{ steps.coverage02.outputs.report }}
+      
+            </details>
