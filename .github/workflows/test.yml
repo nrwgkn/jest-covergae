@@ -28,7 +28,7 @@ jobs:
           output: report-markdown
       
       - name: Set report as env variable
-        run: echo "REPORT=${{ steps.coverage.outputs.report }}" >> $GITHUB_ENV
+        run: printf 'REPORT="%s"\n' "${{ steps.coverage.outputs.report }}" >> $GITHUB_ENV
 
       - name: Display report
         run: printf "%s\n" "$REPORT"
