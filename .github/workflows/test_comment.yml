@@ -33,3 +33,4 @@ jobs:
           coverage-title: My Coverage Title
           coverage-path: ./coverage.txt
           remove-links-to-lines: true
+          report-only-changed-files: true
