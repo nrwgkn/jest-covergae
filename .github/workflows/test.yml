@@ -30,6 +30,6 @@ jobs:
 
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          test-script: npx jest --coverage
+          test-script: npx jest --coverage --silent --testLocationInResults --ci
           annotations: none
           custom-title: Coverage report for frontend
