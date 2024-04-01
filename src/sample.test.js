@@ -11,3 +11,7 @@ test("sample", () => {
 test("sample", () => {
   expect(sample(0)).toBe("sample0");
 });
+
+test("sample", () => {
+  expect(() => sample(3)).toThrow("Invalid mode");
+});
