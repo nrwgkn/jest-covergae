@@ -20,5 +20,6 @@ jobs:
       - name: Jest Coverage Comment
         uses: MishaKav/jest-coverage-comment@main
         with:
+          coverage-summary-path: ./coverage/coverage-summary.json
           coverage-path: ./coverage.txt
           report-only-changed-files: true
