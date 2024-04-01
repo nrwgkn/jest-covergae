@@ -25,3 +25,5 @@ jobs:
           summary-title: My Summary Title
           coverage-title: My Coverage Title
           coverage-path: ./coverage.txt
+          remove-links-to-lines: true
+          remove-links-to-files: true
