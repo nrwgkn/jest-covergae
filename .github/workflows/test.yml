@@ -11,8 +11,25 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+
+      - name: Display node/npm versions
+        run: |
+          echo "node: $(node -v)"
+          echo "npm: $(npm -v)"
+
+      - name: Install Dependencies
+        run: npm install
+
       - uses: ArtiomTr/jest-coverage-report-action@v2
         with:
-          test-script: npm run test:coverage
+          test-script: npx jest --coverage
           annotations: none
           custom-title: Coverage report for frontend
