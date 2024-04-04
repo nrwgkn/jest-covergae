@@ -1,0 +1,23 @@
+coverage:
+  if: true
+codeToTestRatio:
+  code:
+    - '**/*.js'
+    - '!**/*.test.js'
+  test:
+    - '**/*.test.js'
+diff:
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}
+push:
+  if: is_default_branch
+comment:
+  if: is_pull_request
+summary:
+  if: true
+# body:
+#   if: is_pull_request
+report:
+  if: is_default_branch
+  datastores:
+    - artifact://${GITHUB_REPOSITORY}
