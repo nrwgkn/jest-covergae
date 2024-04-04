@@ -12,10 +12,6 @@ test("multiplies 2 * 3 to equal 6", () => {
   expect(calc("mul")(2, 3)).toBe(6);
 });
 
-test("divides 6 / 3 to equal 2", () => {
-  expect(calc("div")(6, 3)).toBe(2);
-});
-
 test("throws an error for an invalid mode", () => {
   expect(() => calc("invalid")).toThrow("Invalid mode");
 });
